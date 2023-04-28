@@ -1,47 +1,52 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import MyBar from "./components/MyBar.vue";
+import MyCard from "./components/MyCard.vue";
+// import items from "./attractions.json";
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <MyBar />
   </header>
 
   <main>
-    <TheWelcome />
+    <h1 style="padding-left: 10px">Attractions</h1>
+    <div className="grid-container">
+      <MyCard v-for="item in items" v-bind="item" />
+    </div>
   </main>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      items: [],
+    };
+  },
+
+  created() {
+    fetch("https://www.melivecode.com/api/attractions")
+      .then((res) => res.json())
+      .then((result) => (this.items = result));
+  },
+};
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
+.grid-container {
+  display: grid;
+  grid-column-gap: 0.5rem;
+  grid-row-gap: 0.5rem;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+@media (min-width: 576px) {
+  .grid-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+@media (min-width: 992px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>
